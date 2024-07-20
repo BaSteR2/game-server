@@ -1,6 +1,6 @@
 # Учебный проект: Игровой Сервер(backend)
 # Описание проекта:
-Многопользовательская игрой ```Dog Story```. 
+Многопользовательская игра ```Dog Story```. 
 Игрок управляет псом, задача которого — находить потерянные вещи и относить их в ближайшее бюро находок. 
 Цель игры — набрать как можно больше игровых очков, которые начисляются за доставленные в бюро вещи.
 
@@ -11,6 +11,7 @@
 - ```GCC 11.4.0```
 - ```conan 1.62.0```
 - ```docker 27.0.3```
+- ```PostgreSQL для Ubuntu```
 	
 # Разворачиваем базу данных:
 Создать контейнер с базой данных ```PosgresSQL```:
@@ -21,9 +22,13 @@ sudo docker run -d --name postgres-container -p 30432:5432 -e TZ=UTC -e POSTGRES
 ```
 sudo docker container start postgres-container
 ```
-Передаем в переменную среды ```GAME_DB_URL``` url базы данных:
+Переходим в контейнер PostgreSQL командой:
 ```
-export GAME_DB_URL="postgres://postgres:Mys3Cr3t@localhost:30432/game_db"
+psql postgres://postgres:Mys3Cr3t@localhost:30432/
+```
+Создаем базу данных для игры:
+```
+CREATE DATABASE game_db;
 ```
 # Установка: 
 Создание папки ```build``` и переход в нее:
@@ -37,6 +42,10 @@ conan install --build missing .. -s compiler.libcxx=libstdc++11 -s build_type=De
 Сборка проекта:
 ```
 cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build .
+```
+Передаем в переменную окружения```GAME_DB_URL``` url базы данных:
+```
+export GAME_DB_URL="postgres://postgres:Mys3Cr3t@localhost:30432/game_db"
 ```
 Используйте флаг ```--help``` для просмотра параметров комендной строки.
 
@@ -54,6 +63,8 @@ cmake .. -DCMAKE_BUILD_TYPE=Debug && cmake --build .
 {"timestamp":"2024-07-19T23:37:43.320084","data":{"port":8080,"address":"0.0.0.0"},"message":"server started"}
 ```
 В режиме ожидания, сервер готов принимать запросы. Для тестирования, откройте в браузере страницу ```http://127.0.0.1:8080```
+
+Управление псом производится клавишами : ```left```,  ```right```, ``` up```, ```down```
 # Технологии:
 - C++17 STL
 - библиотека boost 1.78.0 (.Asio, .Beast, .Log, .Serialization, .Json, .ProgramOptions)
