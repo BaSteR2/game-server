@@ -26,9 +26,10 @@ sudo docker container start postgres-container
 ```
 psql postgres://postgres:Mys3Cr3t@localhost:30432/
 ```
-Создаем базу данных для игры:
+Создаем базу данных для игры и выходим из контейнера:
 ```
 CREATE DATABASE game_db;
+exit
 ```
 # Установка: 
 Создание папки ```build``` и переход в нее:
